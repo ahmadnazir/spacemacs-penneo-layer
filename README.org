@@ -14,10 +14,8 @@ This layer groups some utilities used for developing Penneo services:
 - Manage services (using prodigy.el)
 
 * Install
-To use this configuration layer, add it to your =~/.spacemacs=. You will need to
-add =penneo= to the existing =dotspacemacs-configuration-layers= list in this
-file.
+This layer relies on the =prodigy= package, for which a spacemacs layer already
+exists. Add =prodigy= and =penneo= to your =~/.spacemacs= file.
 
 * Key bindings
-
-No key-bindings defined yet.
+Nothing yet!
