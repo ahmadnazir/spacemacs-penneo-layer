@@ -1,0 +1,23 @@
+#+TITLE: penneo layer
+
+[[file:img/penneo.png]]
+
+# TOC links should be GitHub style anchors.
+* Table of Contents                                        :TOC_4_gh:noexport:
+ - [[#description][Description]]
+ - [[#install][Install]]
+ - [[#key-bindings][Key bindings]]
+
+* Description
+This layer groups some utilities used for developing Penneo services:
+- Generate an authentication token
+- Manage services (using prodigy.el)
+
+* Install
+To use this configuration layer, add it to your =~/.spacemacs=. You will need to
+add =penneo= to the existing =dotspacemacs-configuration-layers= list in this
+file.
+
+* Key bindings
+
+No key-bindings defined yet.
