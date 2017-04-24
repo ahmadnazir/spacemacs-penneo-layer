@@ -68,6 +68,33 @@ Each entry is either:
 (defun penneo/post-init-prodigy()
   "Initialize window package"
 
+  ;;; START -  Until my prodigy changes are merged upstream
+
+  (defconst prodigy-buffer-name "PRODIGY"
+    "Name of Prodigy mode buffer.")
+
+  ;; Predicate: is process or service alive
+  (defun prodigy-service-started-p (service)
+    "Return true if SERVICE is started, false otherwise."
+    (or (-when-let (process (plist-get service :process))
+          (process-live-p process))
+        (-when-let (live-p (plist-get service :live-p))
+          (apply live-p service)
+          )))
+
+  ;; update the status for all processes
+  (defun prodigy-refresh-service-statuses ()
+    "Update the statuses for services."
+    (interactive)
+    (-each prodigy-services
+      (lambda(service)
+        (if (prodigy-service-started-p service)
+            (prodigy-set-status service 'running)
+          (prodigy-set-status service 'stopped)
+          ))))
+
+  ;;; END
+
   (prodigy-define-service
     :name "gateway"
     :command (concat penneo-code-dir "gateway-service/project-runner/run.sh")
@@ -90,11 +117,18 @@ Each entry is either:
     :kill-process-buffer-on-stop nil)
 
   (prodigy-define-service
-    :name "sign"
+    :name "penneo/signing-service"
     :command (concat penneo-code-dir "Symfony2/project-runner/run.sh")
     :args '("dev")
     :stop-signal 'sigkill
-    :kill-process-buffer-on-stop nil)
+    :kill-process-buffer-on-stop nil
+    ;; TODO: Make a tag so that other services can use this
+    :live-p (lambda(&rest service)
+              (-when-let (name (plist-get service :name))
+                (eq 0 (shell-command (concat "docker ps | grep " name) ))
+                )
+              )
+    )
 
   (prodigy-define-service
     :name "workflows/forms"
